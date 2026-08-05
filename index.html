@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roket STUDIo | Movies & Songs Hub</title>
+    <!-- Access Guard Script (Runs before page renders) -->
+    <script>
+        const isLoggedIn = localStorage.getItem("isLoggedIn");
+        if (isLoggedIn !== "true") {
+            window.location.href = "login.html";
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous"/>
+</head>
+<style>
+    :root {
+        --bg-color: #080b12;
+        --card-bg: rgba(20, 27, 44, 0.7);
+        --accent-color: #00f2fe;
+        --spotify-green: #1db954;
+        --accent-gradient: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+        --ai-gradient: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+        --text-main: #f8fafc;
+        --text-muted: #94a3b8;
+        --border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Inter', sans-serif;
+    }
+
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-main);
+        overflow-x: hidden;
+        line-height: 1.6;
+        position: relative;
+    }
+
+    body::before {
+        content: '';
+        position: fixed;
+        top: -100px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(circle, rgba(0, 242, 254, 0.12) 0%, rgba(168, 85, 247, 0.05) 50%, rgba(0,0,0,0) 70%);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    /* HEADER & NAV */
+    header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: rgba(8, 11, 18, 0.85);
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid var(--border-color);
+        padding: 15px 5%;
+    }
+    nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    .logo a {
+        text-decoration: none;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .logo i {
+        font-size: 26px;
+        color: var(--accent-color);
+        filter: drop-shadow(0 0 10px var(--accent-color));
+        animation: float 3s ease-in-out infinite;
+    }
+    .logo h1 {
+        font-family: 'Outfit', sans-serif;
+        font-size: 24px;
+        font-weight: 800;
+        letter-spacing: 1px;
+        background: var(--accent-gradient);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+    .nav-links a {
+        text-decoration: none;
+        color: var(--text-muted);
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    .nav-links a:hover {
+        color: var(--accent-color);
+    }
+    
+    .rs-io-btn {
+        background: var(--ai-gradient);
+        color: #fff;
+        border: none;
+        padding: 8px 18px;
+        border-radius: 20px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+        transition: all 0.3s ease;
+    }
+    .rs-io-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 25px rgba(168, 85, 247, 0.7);
+    }
+
+    /* FLOATING USER CAPSULE BAR */
+    .user-capsule-bar {
+        position: fixed;
+        bottom: 25px;
+        right: 25px;
+        z-index: 1001;
+        background: rgba(15, 23, 42, 0.85);
+        backdrop-filter: blur(16px);
+        border: 1px solid var(--accent-color);
+        padding: 8px 12px 8px 18px;
+        border-radius: 50px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        box-shadow: 0 10px 30px rgba(0, 242, 254, 0.25);
+        animation: slideIn 0.5s ease-out;
+    }
+    .user-details {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .user-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--accent-gradient);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 14px;
+        color: #fff;
+        box-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
+    }
+    .user-info-text {
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+    }
+    .user-name {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-main);
+    }
+    .user-email {
+        font-size: 11px;
+        color: var(--text-muted);
+    }
+    .logout-btn {
+        background: rgba(239, 68, 68, 0.15);
+        border: 1px solid rgba(239, 68, 68, 0.4);
+        color: #f87171;
+        padding: 8px 16px;
+        border-radius: 30px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.3s ease;
+    }
+    .logout-btn:hover {
+        background: #ef4444;
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4);
+    }
+
+    /* HERO SECTION */
+    .hero {
+        text-align: center;
+        padding: 80px 20px 30px;
+        max-width: 900px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+    }
+    .hero h2 {
+        font-family: 'Outfit', sans-serif;
+        font-size: 52px;
+        font-weight: 800;
+        margin-bottom: 15px;
+        background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+        font-size: 18px;
+        color: var(--text-muted);
+        margin-bottom: 25px;
+    }
+
+    /* SEARCH WRAPPER & TAILS */
+    .search-wrapper {
+        max-width: 650px;
+        margin: 0 auto 40px;
+        position: relative;
+    }
+    .search-container {
+        display: flex;
+        gap: 10px;
+    }
+    .search-container input {
+        flex: 1;
+        padding: 14px 22px;
+        border-radius: 30px;
+        border: 1px solid var(--border-color);
+        background: rgba(255, 255, 255, 0.05);
+        color: #fff;
+        font-size: 16px;
+        outline: none;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+    }
+    .search-container input:focus {
+        border-color: var(--accent-color);
+        box-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
+    }
+    .search-container button {
+        padding: 14px 28px;
+        border-radius: 30px;
+        border: none;
+        background: var(--accent-gradient);
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .search-container button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 15px rgba(0, 242, 254, 0.5);
+    }
+
+    /* SEARCH SUGGESTIONS DROPDOWN */
+    .suggestions-list {
+        position: absolute;
+        top: 105%;
+        left: 0;
+        right: 0;
+        background: rgba(15, 23, 42, 0.95);
+        backdrop-filter: blur(16px);
+        border: 1px solid var(--accent-color);
+        border-radius: 16px;
+        max-height: 280px;
+        overflow-y: auto;
+        z-index: 100;
+        display: none;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+        text-align: left;
+    }
+    .suggestions-list.active {
+        display: block;
+    }
+    .suggestion-item {
+        padding: 12px 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: var(--text-main);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        transition: background 0.2s ease;
+    }
+    .suggestion-item:last-child {
+        border-bottom: none;
+    }
+    .suggestion-item:hover {
+        background: rgba(0, 242, 254, 0.15);
+        color: var(--accent-color);
+    }
+    .suggestion-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .badge {
+        font-size: 11px;
+        padding: 3px 8px;
+        border-radius: 10px;
+        background: rgba(255,255,255,0.1);
+        color: var(--accent-color);
+        text-transform: uppercase;
+        font-weight: 600;
+    }
+
+    /* RESULT CARD */
+    .result-card {
+        max-width: 700px;
+        margin: 0 auto 50px;
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 25px;
+        display: none;
+        gap: 25px;
+        align-items: center;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .result-card.active {
+        display: flex;
+    }
+    .result-card img {
+        width: 140px;
+        height: 140px;
+        object-fit: cover;
+        border-radius: 16px;
+        border: 2px solid var(--accent-color);
+    }
+    .item-info {
+        text-align: left;
+        flex: 1;
+    }
+    .item-info h3 {
+        font-family: 'Outfit', sans-serif;
+        font-size: 24px;
+        margin-bottom: 6px;
+    }
+    .item-info p {
+        color: var(--text-muted);
+        font-size: 14px;
+        margin-bottom: 12px;
+    }
+    audio {
+        width: 100%;
+        margin-bottom: 15px;
+        height: 35px;
+    }
+    .card-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    .find-watch-btn {
+        background: var(--ai-gradient);
+        color: #fff;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 20px;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+    }
+    .find-watch-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(168, 85, 247, 0.4);
+    }
+    .spotify-btn {
+        background: var(--spotify-green);
+        color: #fff;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 20px;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+    }
+    .spotify-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(29, 185, 84, 0.4);
+    }
+
+    /* SECTIONS GRID */
+    .sections-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
+    .section-heading {
+        font-family: 'Outfit', sans-serif;
+        font-size: 32px;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+    }
+    .card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        padding: 30px 20px;
+        border-radius: 16px;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+        text-align: center;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        border-color: var(--accent-color);
+        box-shadow: 0 10px 30px rgba(0, 242, 254, 0.15);
+    }
+    .card i {
+        font-size: 36px;
+        color: var(--accent-color);
+        margin-bottom: 15px;
+    }
+    .card h3 {
+        font-family: 'Outfit', sans-serif;
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+    .card p {
+        color: var(--text-muted);
+        font-size: 14px;
+    }
+
+    /* TEAM SECTION */
+    .about {
+        max-width: 1200px;
+        margin: 60px auto;
+        padding: 40px 20px;
+        text-align: center;
+    }
+    .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        margin-top: 40px;
+    }
+    .team-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        padding: 30px 20px;
+        border-radius: 16px;
+        transition: all 0.3s ease;
+    }
+    .team-card:hover {
+        transform: translateY(-8px);
+        border-color: var(--accent-color);
+    }
+    .team-card img {
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 15px;
+        border: 2px solid var(--accent-color);
+    }
+
+    /* CONTACT SECTION */
+    .contact {
+        max-width: 500px;
+        margin: 60px auto;
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        padding: 40px 30px;
+        border-radius: 20px;
+    }
+    .contact form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    .contact form input, .contact form textarea {
+        width: 100%;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        color: #fff;
+    }
+    .contact form button {
+        padding: 12px;
+        background: var(--accent-gradient);
+        border: none;
+        border-radius: 8px;
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    /* FOOTER */
+    footer {
+        background: #04060a;
+        border-top: 1px solid var(--border-color);
+        padding: 40px 20px;
+        text-align: center;
+        margin-top: 80px;
+    }
+    footer span {
+        color: var(--accent-color);
+        font-weight: 700;
+    }
+
+    /* RS Io AI MODAL POPUP */
+    .ai-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(8px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+    .ai-modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+    .ai-modal {
+        background: #0f172a;
+        border: 1px solid var(--accent-color);
+        padding: 30px;
+        border-radius: 20px;
+        max-width: 480px;
+        width: 90%;
+        text-align: center;
+        box-shadow: 0 0 30px rgba(0, 242, 254, 0.3);
+        transform: scale(0.8);
+        transition: transform 0.3s ease;
+    }
+    .ai-modal-overlay.active .ai-modal {
+        transform: scale(1);
+    }
+    .ai-modal i.main-icon {
+        font-size: 40px;
+        color: var(--accent-color);
+        margin-bottom: 15px;
+    }
+    .ai-modal h4 {
+        font-family: 'Outfit', sans-serif;
+        font-size: 22px;
+        margin-bottom: 10px;
+    }
+    .ai-modal p {
+        color: var(--text-muted);
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+    .modal-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .btn-google {
+        background: var(--accent-gradient);
+        color: #fff;
+        border: none;
+        padding: 12px;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+    .btn-gemini {
+        background: var(--ai-gradient);
+        color: #fff;
+        border: none;
+        padding: 12px;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+    .btn-close {
+        background: transparent;
+        color: var(--text-muted);
+        border: 1px solid var(--border-color);
+        padding: 8px;
+        border-radius: 12px;
+        cursor: pointer;
+        margin-top: 5px;
+    }
+
+    @keyframes slideIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-6px); }
+    }
+</style>
+<body>
+
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="#">
+                    <i class="fa-solid fa-rocket"></i>
+                    <h1>Roket STUDIo</h1>
+                </a>
+            </div>
+            <div class="nav-links">
+                <a href="#services">Hub</a>
+                <a href="#about">Team</a>
+                <button class="rs-io-btn" onclick="launchRSIo()">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> RSIo AI
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- FIXED FLOATING USER CAPSULE BAR -->
+    <div class="user-capsule-bar" id="userCapsule">
+        <div class="user-details">
+            <div class="user-avatar" id="avatarLetter">U</div>
+            <div class="user-info-text">
+                <span class="user-name" id="displayUserName">User Name</span>
+                <span class="user-email" id="displayUserEmail">user@example.com</span>
+            </div>
+        </div>
+        <button class="logout-btn" onclick="handleLogout()">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </button>
+    </div>
+
+    <div class="hero">
+        <h2>Welcome to Roket STUDIo</h2>
+        <p>Instant search for Movies & Songs. Let RSIo AI guide you to Spotify, streaming & download sources.</p>
+        
+        <!-- Live Movies & Songs Search Engine -->
+        <div class="search-wrapper">
+            <div class="search-container">
+                <input type="text" id="universalInput" placeholder="Search Movies or Songs..." autocomplete="off">
+                <button onclick="triggerSearch()"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+            </div>
+            <div class="suggestions-list" id="suggestionsBox"></div>
+        </div>
+
+        <!-- Result Card -->
+        <div class="result-card" id="resultCard">
+            <img id="itemPoster" src="" alt="Poster / Artwork">
+            <div class="item-info">
+                <h3 id="itemTitle">Item Title</h3>
+                <p id="itemSubText">Artist or Plot Details...</p>
+                <div id="audioPlayerContainer"></div>
+                <div class="card-actions">
+                    <button class="find-watch-btn" onclick="askRSIoForPlatform()">
+                        <i class="fa-solid fa-compass"></i> Find Links with RSIo
+                    </button>
+                    <button class="spotify-btn" id="spotifyBtn" onclick="openSpotifyDirect()">
+                        <i class="fa-brands fa-spotify"></i> Play on Spotify
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sections-container" id="services">
+        <h3 class="section-heading">Movies & Music Intelligence</h3>
+        <div class="grid">
+            <div class="card">
+                <i class="fa-solid fa-film"></i>
+                <h3>Movies & Cinema</h3>
+                <p>Complete plot details, cast info, box office trends, and streaming insights.</p>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-music"></i>
+                <h3>Songs & Audio Tracks</h3>
+                <p>Trending Bollywood & Global soundtracks, instant previews, and lyrics search.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="about" id="about">
+        <h3 class="section-heading">Leadership</h3>
+        <div class="team-grid">
+            <div class="team-card">
+                <img src="https://media.craiyon.com/2025-04-22/fj3wmf_OSdqXuMPryiwEaA.webp" alt="Krish Barot">
+                <h4>Krish Barot</h4>
+                <p>Founder & CEO | Lead Developer</p>
+            </div>
+            <div class="team-card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEnPoh7UdRU2pAFy85ypmrBND1Mi2ZYRkDzkiwROBr4w&s=10" alt="Sadhu Sahil">
+                <h4>Sadhu Sahil</h4>
+                <p>Analytics Specialist</p>
+            </div>
+            <div class="team-card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLhgYPBcmBzWg4LqQtyFz8NwQkVE6uwFTGFdZAoHyjuQ&s=10" alt="Jagdish Thakor">
+                <h4>Jagdish Thakor</h4>
+                <p>Resource Manager</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Developed by <span>Krish Barot</span> — Lead Developer [FOUNDER & CEO]</p>
+        <p style="color: var(--text-muted); font-size: 13px; margin-top: 10px;">Powered by Gemini AI Technology</p>
+        <p style="margin-top: 15px; font-size: 12px; color: #475569;">&copy; 2026 Roket STUDIo. All rights reserved.</p>
+    </footer>
+
+    <!-- Custom AI Multi-Choice Modal Popup -->
+    <div class="ai-modal-overlay" id="aiModal">
+        <div class="ai-modal">
+            <i class="fa-solid fa-robot main-icon"></i>
+            <h4>RSIo AI Search Assistant</h4>
+            <p id="aiModalText">HELLO, I AM 'RSIo! Choose how you want to find streaming links:</p>
+            
+            <div class="modal-actions">
+                <button class="btn-google" onclick="searchDirectGoogle()">
+                    <i class="fa-brands fa-google"></i> Direct Google Search Results
+                </button>
+                <button class="btn-gemini" onclick="copyAndLaunchGemini()">
+                    <i class="fa-solid fa-copy"></i> Copy Prompt & Open Gemini AI
+                </button>
+                <button class="btn-close" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Engine & Auth Handler -->
+    <script>
+        // Set User Profile Details from Local Storage
+        const userName = localStorage.getItem("userName") || "User";
+        const userEmail = localStorage.getItem("userEmail") || "user@roket.com";
+
+        document.getElementById("displayUserName").innerText = userName;
+        document.getElementById("displayUserEmail").innerText = userEmail;
+        document.getElementById("avatarLetter").innerText = userName.charAt(0).toUpperCase();
+
+        function handleLogout() {
+            localStorage.removeItem("isLoggedIn");
+            localStorage.removeItem("userName");
+            localStorage.removeItem("userEmail");
+            window.location.href = "login.html";
+        }
+
+        let currentSearchedItem = "";
+        let currentItemType = "song";
+        let debounceTimer;
+
+        const universalInput = document.getElementById("universalInput");
+        const suggestionsBox = document.getElementById("suggestionsBox");
+
+        universalInput.addEventListener("input", function() {
+            clearTimeout(debounceTimer);
+            const query = universalInput.value.trim();
+
+            if (query.length < 2) {
+                suggestionsBox.classList.remove("active");
+                return;
+            }
+
+            debounceTimer = setTimeout(() => {
+                Promise.all([
+                    fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&entity=song&limit=4`).then(r => r.json()),
+                    fetch(`https://www.omdbapi.com/?s=${encodeURIComponent(query)}&apikey=trilogy`).then(r => r.json())
+                ]).then(([musicData, movieData]) => {
+                    let results = [];
+
+                    if (musicData.results) {
+                        musicData.results.forEach(m => results.push({ type: 'song', title: m.trackName, artist: m.artistName, raw: m }));
+                    }
+                    if (movieData.Search) {
+                        movieData.Search.slice(0, 3).forEach(m => results.push({ type: 'movie', title: m.Title, year: m.Year, raw: m }));
+                    }
+
+                    renderSuggestions(results);
+                }).catch(() => suggestionsBox.classList.remove("active"));
+            }, 300);
+        });
+
+        function renderSuggestions(items) {
+            if (items.length === 0) {
+                suggestionsBox.classList.remove("active");
+                return;
+            }
+            suggestionsBox.innerHTML = "";
+            items.forEach(item => {
+                const isSong = item.type === "song";
+                const icon = isSong ? "fa-music" : "fa-film";
+                const sub = isSong ? `by ${item.artist}` : `(${item.year})`;
+                const badgeText = isSong ? "🎵 Song" : "🎬 Movie";
+
+                const div = document.createElement("div");
+                div.className = "suggestion-item";
+                div.innerHTML = `
+                    <div class="suggestion-info">
+                        <i class="fa-solid ${icon}"></i>
+                        <span><strong>${item.title}</strong> <small style="color:#94a3b8;">${sub}</small></span>
+                    </div>
+                    <span class="badge">${badgeText}</span>
+                `;
+                
+                div.addEventListener("click", () => {
+                    universalInput.value = item.title;
+                    suggestionsBox.classList.remove("active");
+                    if (isSong) {
+                        displaySongResult(item.raw);
+                    } else {
+                        fetchMovieDetails(item.title);
+                    }
+                });
+                suggestionsBox.appendChild(div);
+            });
+            suggestionsBox.classList.add("active");
+        }
+
+        document.addEventListener("click", function(e) {
+            if (!e.target.closest(".search-wrapper")) {
+                suggestionsBox.classList.remove("active");
+            }
+        });
+
+        universalInput.addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                suggestionsBox.classList.remove("active");
+                triggerSearch();
+            }
+        });
+
+        function triggerSearch() {
+            const query = universalInput.value.trim();
+            if (!query) return;
+
+            fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&entity=song&limit=1`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.results && data.results.length > 0) {
+                        displaySongResult(data.results[0]);
+                    } else {
+                        fetchMovieDetails(query);
+                    }
+                });
+        }
+
+        function displaySongResult(item) {
+            currentSearchedItem = item.trackName;
+            currentItemType = "song";
+
+            document.getElementById('itemTitle').innerText = item.trackName;
+            document.getElementById('itemSubText').innerText = `Artist: ${item.artistName} | Album: ${item.collectionName || 'Single'}`;
+            document.getElementById('itemPoster').src = item.artworkUrl100.replace("100x100bb", "300x300bb");
+
+            const audioContainer = document.getElementById('audioPlayerContainer');
+            if (item.previewUrl) {
+                audioContainer.innerHTML = `<audio controls src="${item.previewUrl}"></audio>`;
+            } else {
+                audioContainer.innerHTML = "";
+            }
+
+            document.getElementById('spotifyBtn').style.display = "inline-flex";
+            document.getElementById('resultCard').classList.add('active');
+        }
+
+        function fetchMovieDetails(title) {
+            fetch(`https://www.omdbapi.com/?t=${encodeURIComponent(title)}&apikey=trilogy`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.Response === "True") {
+                        currentSearchedItem = data.Title;
+                        currentItemType = "movie";
+
+                        document.getElementById('itemTitle').innerText = `${data.Title} (${data.Year})`;
+                        document.getElementById('itemSubText').innerText = `Genre: ${data.Genre} | Plot: ${data.Plot}`;
+                        document.getElementById('itemPoster').src = data.Poster !== "N/A" ? data.Poster : "https://via.placeholder.com/140x200?text=No+Poster";
+                        document.getElementById('audioPlayerContainer').innerHTML = "";
+                        document.getElementById('spotifyBtn').style.display = "none";
+
+                        document.getElementById('resultCard').classList.add('active');
+                    } else {
+                        alert("No Movies or Songs found matching your query!");
+                    }
+                });
+        }
+
+        function openSpotifyDirect() {
+            if (!currentSearchedItem) return;
+            window.open(`https://open.spotify.com/search/${encodeURIComponent(currentSearchedItem)}`, "_blank");
+        }
+
+        function launchRSIo() {
+            document.getElementById('aiModalText').innerText = "HELLO, I AM 'RSIo! Let's Go To Get Some Unpredictable...";
+            document.getElementById('aiModal').classList.add('active');
+        }
+
+        function askRSIoForPlatform() {
+            if (!currentSearchedItem) return;
+            const actionText = currentItemType === "song" ? "listen/download" : "watch/download";
+            const promptText = `HELLO, I AM 'RSIo! Searching best official platforms to ${actionText} '${currentSearchedItem}'...`;
+            document.getElementById('aiModalText').innerText = promptText;
+            document.getElementById('aiModal').classList.add('active');
+        }
+
+        function searchDirectGoogle() {
+            const queryType = currentItemType === "song" ? "song download Spotify YouTube" : "movie online watch and download";
+            const searchQuery = currentSearchedItem 
+                ? `${currentSearchedItem} ${queryType}`
+                : "latest movies and songs";
+            
+            window.open(`https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`, "_blank");
+            closeModal();
+        }
+
+        function copyAndLaunchGemini() {
+            const action = currentItemType === "song" ? "listen to or download" : "stream or download";
+            const prompt = currentSearchedItem 
+                ? `Where can I ${action} the ${currentItemType} "${currentSearchedItem}" legally? List top platforms like Spotify, Apple Music, YouTube, Netflix.` 
+                : "Suggest top movies and songs.";
+
+            navigator.clipboard.writeText(prompt).then(() => {
+                alert("Prompt copied to clipboard! Press Ctrl+V in Gemini.");
+                window.open("https://gemini.google.com", "_blank");
+            }).catch(() => {
+                window.open("https://gemini.google.com", "_blank");
+            });
+
+            closeModal();
+        }
+
+        function closeModal() {
+            document.getElementById('aiModal').classList.remove('active');
+        }
+    </script>
+</body>
+</html>

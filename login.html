@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Roket STUDIo</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous"/>
+</head>
+<style>
+    :root {
+        --bg-color: #080b12;
+        --card-bg: rgba(20, 27, 44, 0.75);
+        --accent-color: #00f2fe;
+        --accent-gradient: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+        --text-main: #f8fafc;
+        --text-muted: #94a3b8;
+        --border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Inter', sans-serif;
+    }
+
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-main);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    body::before {
+        content: '';
+        position: fixed;
+        top: -100px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(circle, rgba(0, 242, 254, 0.15) 0%, rgba(168, 85, 247, 0.08) 50%, rgba(0,0,0,0) 70%);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .auth-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 24px;
+        padding: 40px;
+        width: 100%;
+        max-width: 420px;
+        backdrop-filter: blur(16px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+        z-index: 1;
+        position: relative;
+    }
+
+    .logo-container {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .logo-container a {
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .logo-container i {
+        font-size: 28px;
+        color: var(--accent-color);
+        filter: drop-shadow(0 0 10px var(--accent-color));
+    }
+
+    .logo-container h1 {
+        font-family: 'Outfit', sans-serif;
+        font-size: 26px;
+        font-weight: 800;
+        background: var(--accent-gradient);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .auth-header {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .auth-header h2 {
+        font-family: 'Outfit', sans-serif;
+        font-size: 24px;
+        margin-bottom: 8px;
+    }
+
+    .auth-header p {
+        color: var(--text-muted);
+        font-size: 14px;
+    }
+
+    .social-btn {
+        width: 100%;
+        padding: 12px;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--text-main);
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+    }
+
+    .social-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: var(--accent-color);
+        transform: translateY(-2px);
+    }
+
+    .divider {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        margin-bottom: 20px;
+        color: var(--text-muted);
+        font-size: 12px;
+    }
+
+    .divider::before, .divider::after {
+        content: '';
+        flex: 1;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .divider span {
+        padding: 0 10px;
+    }
+
+    .form-group {
+        margin-bottom: 18px;
+    }
+
+    .form-group label {
+        display: block;
+        font-size: 13px;
+        color: var(--text-muted);
+        margin-bottom: 8px;
+    }
+
+    .input-wrapper {
+        position: relative;
+    }
+
+    .input-wrapper i {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+    }
+
+    .input-wrapper input {
+        width: 100%;
+        padding: 12px 14px 12px 42px;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        background: rgba(255, 255, 255, 0.03);
+        color: #fff;
+        outline: none;
+        transition: all 0.3s ease;
+    }
+
+    .input-wrapper input:focus {
+        border-color: var(--accent-color);
+        box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 12px;
+        border-radius: 12px;
+        border: none;
+        background: var(--accent-gradient);
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+    }
+
+    .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(0, 242, 254, 0.4);
+    }
+
+    .auth-footer {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 14px;
+        color: var(--text-muted);
+    }
+
+    .auth-footer a {
+        color: var(--accent-color);
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .auth-footer a:hover {
+        text-decoration: underline;
+    }
+</style>
+<body>
+
+    <div class="auth-card">
+        <div class="logo-container">
+            <a href="index.html">
+                <i class="fa-solid fa-rocket"></i>
+                <h1>Roket STUDIo</h1>
+            </a>
+        </div>
+
+        <div class="auth-header">
+            <h2>Welcome Back</h2>
+            <p>Login to your Roket STUDIo account</p>
+        </div>
+
+        <!-- Google Auth Option -->
+        <button class="social-btn" id="googleLoginBtn">
+            <i class="fa-brands fa-google" style="color: #ea4335;"></i> Continue with Google
+        </button>
+
+        <div class="divider">
+            <span>OR LOGIN WITH EMAIL</span>
+        </div>
+
+        <!-- Email/Password Form -->
+        <form id="loginForm">
+            <div class="form-group">
+                <label>Email Address</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" id="loginEmail" placeholder="name@example.com" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Login to Account</button>
+        </form>
+
+        <div class="auth-footer">
+            Don't have an account? <a href="register.html">Register</a>
+        </div>
+    </div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCPdtPHt-B45evpADYufE1H2TVtRrV7Eek",
+        authDomain: "rocket-studio-c06b9.firebaseapp.com",
+        projectId: "rocket-studio-c06b9",
+        storageBucket: "rocket-studio-c06b9.firebasestorage.app",
+        messagingSenderId: "302824968036",
+        appId: "1:302824968036:web:df5dc20b20ebdc6ac7f471",
+        measurementId: "G-S1Q68G3EY2"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const googleProvider = new GoogleAuthProvider();
+
+    // Google Sign-In Logic
+    document.getElementById("googleLoginBtn").addEventListener("click", () => {
+        signInWithPopup(auth, googleProvider)
+            .then((result) => {
+                const user = result.user;
+                localStorage.setItem("isLoggedIn", "true");
+                localStorage.setItem("userName", user.displayName || "User");
+                localStorage.setItem("userEmail", user.email);
+                window.location.href = "index.html";
+            })
+            .catch((error) => alert(error.message));
+    });
+
+    // Email/Password Login Logic
+    document.getElementById("loginForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const email = document.getElementById("loginEmail").value;
+        const password = document.getElementById("loginPassword").value;
+
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                if (!user.emailVerified) {
+                    alert("Your email is not verified yet! Please check your inbox and click the verification link.");
+                    return;
+                }
+                localStorage.setItem("isLoggedIn", "true");
+                localStorage.setItem("userName", user.displayName || email.split('@')[0]);
+                localStorage.setItem("userEmail", user.email);
+                window.location.href = "index.html";
+            })
+            .catch((error) => alert("Invalid email/password or account does not exist."));
+    });
+</script>
+</body>
+</html>
