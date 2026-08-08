@@ -6,8 +6,8 @@
     <title>Roket STUDIo | Movies & Songs Hub</title>
     
     <!-- PWA Web App & Favicon Integration -->
-    <link rel="icon" type="image/png" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0UoAYB2iDlhda9bwpjdcmf7W2VB2uoRFArwUt2igFr9cV69TDY6FJrA&s=10">
-    <link rel="apple-touch-icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0UoAYB2iDlhda9bwpjdcmf7W2VB2uoRFArwUt2igFr9cV69TDY6FJrA&s=10">
+    <link rel="icon" type="image/jpeg" href="rs.jpg">
+    <link rel="apple-touch-icon" href="rs-app.jpg">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#00f2fe">
     <meta name="mobile-web-app-capable" content="yes">
@@ -92,10 +92,12 @@
         align-items: center;
         gap: 12px;
     }
-    .logo i {
-        font-size: 26px;
-        color: var(--accent-color);
-        filter: drop-shadow(0 0 10px var(--accent-color));
+    .logo a img {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        object-fit: cover;
+        box-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
         animation: float 3s ease-in-out infinite;
     }
     .logo h1 {
@@ -653,104 +655,102 @@
     }
 
     /* IN-APP PWA INSTALL BANNER STYLES */
-.pwa-install-banner {
-    position: fixed;
-    bottom: -100px; /* Initially hidden below screen */
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-    max-width: 500px;
-    background: rgba(15, 23, 42, 0.9);
-    backdrop-filter: blur(16px);
-    border: 1px solid var(--accent-color);
-    border-radius: 20px;
-    padding: 16px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 15px;
-    box-shadow: 0 10px 30px rgba(0, 242, 254, 0.3);
-    z-index: 1002;
-    transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.pwa-install-banner.active {
-    bottom: 25px; /* Slides up smoothly */
-}
-
-.pwa-banner-content {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.pwa-app-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    background: var(--accent-gradient);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    color: #fff;
-    box-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
-    flex-shrink: 0;
-}
-
-.pwa-text-info h4 {
-    font-family: 'Outfit', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--text-main);
-}
-
-.pwa-text-info p {
-    font-size: 11px;
-    color: var(--text-muted);
-}
-
-.pwa-banner-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-shrink: 0;
-}
-
-.pwa-btn-dismiss {
-    background: transparent;
-    border: none;
-    color: var(--text-muted);
-    font-size: 12px;
-    cursor: pointer;
-    padding: 6px 10px;
-}
-
-.pwa-btn-install {
-    background: var(--accent-gradient);
-    color: #fff;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: all 0.3s ease;
-}
-
-.pwa-btn-install:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 242, 254, 0.4);
-}
-
-@media (max-width: 768px) {
-    .pwa-install-banner.active {
-        bottom: 80px; /* Moves above Floating User Capsule on mobile */
+    .pwa-install-banner {
+        position: fixed;
+        bottom: -100px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 500px;
+        background: rgba(15, 23, 42, 0.9);
+        backdrop-filter: blur(16px);
+        border: 1px solid var(--accent-color);
+        border-radius: 20px;
+        padding: 16px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        box-shadow: 0 10px 30px rgba(0, 242, 254, 0.3);
+        z-index: 1002;
+        transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-}
+
+    .pwa-install-banner.active {
+        bottom: 25px;
+    }
+
+    .pwa-banner-content {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .pwa-app-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
+        flex-shrink: 0;
+        overflow: hidden;
+    }
+
+    .pwa-app-icon img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .pwa-text-info h4 {
+        font-family: 'Outfit', sans-serif;
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--text-main);
+    }
+
+    .pwa-text-info p {
+        font-size: 11px;
+        color: var(--text-muted);
+    }
+
+    .pwa-banner-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-shrink: 0;
+    }
+
+    .pwa-btn-dismiss {
+        background: transparent;
+        border: none;
+        color: var(--text-muted);
+        font-size: 12px;
+        cursor: pointer;
+        padding: 6px 10px;
+    }
+
+    .pwa-btn-install {
+        background: var(--accent-gradient);
+        color: #fff;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.3s ease;
+    }
+
+    .pwa-btn-install:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 242, 254, 0.4);
+    }
 
     @media (max-width: 768px) {
         header { padding: 12px 4%; }
@@ -762,6 +762,7 @@
         .item-info { text-align: center; }
         .card-actions { justify-content: center; }
         .user-capsule-bar { bottom: 15px; right: 15px; }
+        .pwa-install-banner.active { bottom: 80px; }
     }
 
     @keyframes slideIn {
@@ -779,7 +780,7 @@
         <nav>
             <div class="logo">
                 <a href="#">
-                    <i class="fa-solid fa-rocket"></i>
+                    <img src="rs.jpg" alt="Roket STUDIo Logo">
                     <h1>Roket STUDIo</h1>
                 </a>
             </div>
@@ -865,7 +866,7 @@
         <h3 class="section-heading">Leadership</h3>
         <div class="team-grid">
             <div class="team-card">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0UoAYB2iDlhda9bwpjdcmf7W2VB2uoRFArwUt2igFr9cV69TDY6FJrA&s=10" alt="Krish Barot">
+                <img src="rs.jpg" alt="Krish Barot">
                 <h4>Krish Barot</h4>
                 <p>Founder & Producer | Lead Developer</p>
             </div>
@@ -894,6 +895,25 @@
                 </button>
                 <button class="btn-close" onclick="closeModal()">Cancel</button>
             </div>
+        </div>
+    </div>
+
+    <!-- IN-APP PWA INSTALL BANNER -->
+    <div class="pwa-install-banner" id="pwaInstallBanner">
+        <div class="pwa-banner-content">
+            <div class="pwa-app-icon">
+                <img src="rs.jpg" alt="Roket STUDIo Logo">
+            </div>
+            <div class="pwa-text-info">
+                <h4>Install Roket STUDIo</h4>
+                <p>Get the full app experience on your home screen!</p>
+            </div>
+        </div>
+        <div class="pwa-banner-actions">
+            <button class="pwa-btn-dismiss" id="pwaCloseBtn">Later</button>
+            <button class="pwa-btn-install" id="pwaInstallBtn">
+                <i class="fa-solid fa-download"></i> Install
+            </button>
         </div>
     </div>
 
@@ -981,7 +1001,7 @@
         });
     </script>
 
-    <!-- Movies & Songs JavaScript Engine -->
+    <!-- Movies & Songs JavaScript Engine & PWA Controller -->
     <script>
         let currentSearchedItem = "";
         let currentItemType = "song";
@@ -1170,71 +1190,40 @@
             closeModal();
         }
 
-        // PWA Custom Install Prompt Controller
-let deferredPrompt;
-const installBanner = document.getElementById('pwaInstallBanner');
-const installBtn = document.getElementById('pwaInstallBtn');
-const closeBtn = document.getElementById('pwaCloseBtn');
-
-// Listen for browser's beforeinstallprompt event
-window.addEventListener('beforeinstallprompt', (e) => {
-    // Prevent the default mini-infobar from appearing on mobile
-    e.preventDefault();
-    deferredPrompt = e;
-
-    // Show the custom in-app install banner
-    installBanner.classList.add('active');
-});
-
-// Install Button Action
-installBtn.addEventListener('click', async () => {
-    if (!deferredPrompt) return;
-
-    // Trigger the native browser install prompt
-    deferredPrompt.prompt();
-
-    // Wait for the user response
-    const { outcome } = await deferredPrompt.userChoice;
-    console.log(`User response to the install prompt: ${outcome}`);
-
-    // Reset prompt variable & hide banner
-    deferredPrompt = null;
-    installBanner.classList.remove('active');
-});
-
-// Dismiss Banner Action
-closeBtn.addEventListener('click', () => {
-    installBanner.classList.remove('active');
-});
-
-// Hide banner if app is already installed
-window.addEventListener('appinstalled', () => {
-    deferredPrompt = null;
-    installBanner.classList.remove('active');
-    console.log('Roket STUDIo was installed successfully!');
-});
-
         function closeModal() {
             document.getElementById('aiModal').classList.remove('active');
         }
+
+        // PWA Custom Install Prompt Controller Logic
+        let deferredPrompt;
+        const installBanner = document.getElementById('pwaInstallBanner');
+        const installBtn = document.getElementById('pwaInstallBtn');
+        const closeBtn = document.getElementById('pwaCloseBtn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBanner.classList.add('active');
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log(`User response to install: ${outcome}`);
+            deferredPrompt = null;
+            installBanner.classList.remove('active');
+        });
+
+        closeBtn.addEventListener('click', () => {
+            installBanner.classList.remove('active');
+        });
+
+        window.addEventListener('appinstalled', () => {
+            deferredPrompt = null;
+            installBanner.classList.remove('active');
+            console.log('Roket STUDIo installed successfully!');
+        });
     </script>
-    <!-- IN-APP PWA INSTALL BANNER -->
-<div class="pwa-install-banner" id="pwaInstallBanner">
-    <div class="pwa-banner-content">
-        <div class="pwa-app-icon">
-            <i class="fa-solid fa-rocket"></i>
-        </div>
-        <div class="pwa-text-info">
-            <h4>Install Roket STUDIo</h4>
-            <p>Get the full app experience on your home screen!</p>
-        </div>
-    </div>
-    <div class="pwa-banner-actions">
-        <button class="pwa-btn-dismiss" id="pwaCloseBtn">Later</button>
-        <button class="pwa-btn-install" id="pwaInstallBtn">
-            <i class="fa-solid fa-download"></i> Install
-        </button>
-    </div>
-</div>
 </body>
 </html>
