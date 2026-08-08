@@ -808,7 +808,7 @@
                 const isSong = item.type === "song";
                 const icon = isSong ? "fa-music" : "fa-film";
                 const sub = isSong ? `by ${item.artist}` : `(${item.year})`;
-                const badgeText = isSong ? "<i class = fas fa-music> Song" : "<i class="fa-solid fa-film"></i> Movie";
+                const badgeText = isSong ? "<i class="fa-solid fa-music"></i> Song" : "<i class="fa-solid fa-film"></i> Movie";
 
                 const div = document.createElement("div");
                 div.className = "suggestion-item";
