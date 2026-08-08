@@ -716,7 +716,7 @@
     </div>
 
     <div class="hero">
-        <h2>Welcome to Roket STUDIo</h2>
+        <h2>Welcome to Rocket STUDIo</h2>
         <p>Instant search for Movies & Songs. Let RSIo AI guide you to Spotify, streaming & download sources.</p>
         
         <!-- Live Movies & Songs Search Engine -->
@@ -764,10 +764,10 @@
     </div>
 
     <div class="about" id="about">
-        <h3 class="section-heading">Leadership</h3>
+        <h3 class="section-heading">• Leadership</h3>
         <div class="team-grid">
             <div class="team-card">
-                <img src="rs.jpg" alt="Krish Barot">
+                <img src="rs-app.png" alt="Krish Barot">
                 <h4>Krish Barot</h4>
                 <p>Founder & Producer | Lead Developer</p>
             </div>
@@ -777,7 +777,7 @@
     <footer>
         <p>Developed by <span>Krish Barot</span> — Lead Developer [FOUNDER & PRODUCER]</p>
         <p style="color: var(--text-muted); font-size: 13px; margin-top: 10px;">Powered by Gemini AI Technology</p>
-        <p style="margin-top: 15px; font-size: 12px; color: #475569;">&copy; 2026 Roket STUDIo. All rights reserved.</p>
+        <p style="margin-top: 15px; font-size: 12px; color: #475569;">&copy; 2026 Rocket STUDIo. All rights reserved.</p>
     </footer>
 
     <!-- Custom AI Multi-Choice Modal Popup -->
@@ -846,7 +846,7 @@
                 }
             } else {
                 const name = localStorage.getItem("userName") || "User";
-                const email = localStorage.getItem("userEmail") || "user@roket.com";
+                const email = localStorage.getItem("userEmail") || "user@rocket.com";
                 document.getElementById("displayUserName").innerText = name;
                 document.getElementById("displayUserEmail").innerText = email;
                 document.getElementById("tooltipName").innerText = name;
@@ -932,8 +932,8 @@
                 const sub = isSong ? `by ${item.artist}` : `(${item.year})`;
                 
                 const badgeText = isSong 
-                    ? `<i class="fa-solid fa-music"></i> Song` 
-                    : `<i class="fa-solid fa-film"></i> Movie`;
+                    ? `<i class="fa-solid fa-music" style= "color: red;"></i> Song` 
+                    : `<i class="fa-solid fa-film" style= "color: red;"></i> Movie`;
 
                 const div = document.createElement("div");
                 div.className = "suggestion-item";
