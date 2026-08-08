@@ -132,7 +132,7 @@
         box-shadow: 0 0 25px rgba(168, 85, 247, 0.7);
     }
 
-    /* FLOATING USER CAPSULE BAR */
+    /* CIRCULAR AVATAR TO CAPSULE WIDGET */
     .user-capsule-bar {
         position: fixed;
         bottom: 25px;
@@ -141,47 +141,53 @@
         background: rgba(15, 23, 42, 0.85);
         backdrop-filter: blur(16px);
         border: 1px solid var(--accent-color);
-        padding: 8px 12px 8px 18px;
+        padding: 6px;
         border-radius: 50px;
         display: flex;
         align-items: center;
-        gap: 15px;
         box-shadow: 0 10px 30px rgba(0, 242, 254, 0.25);
-        animation: slideIn 0.5s ease-out;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        cursor: pointer;
     }
-    .user-details {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
+
     .user-avatar {
-        width: 32px;
-        height: 32px;
+        width: 42px;
+        height: 42px;
         border-radius: 50%;
         background: var(--accent-gradient);
         display: flex;
         align-items: center;
         justify-content: center;
         font-weight: 700;
-        font-size: 14px;
+        font-size: 16px;
         color: #fff;
         box-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
+        flex-shrink: 0;
     }
+
     .user-info-text {
-        display: flex;
+        display: none;
         flex-direction: column;
         text-align: left;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        padding: 0 10px;
+        white-space: nowrap;
     }
+
     .user-name {
         font-size: 13px;
         font-weight: 600;
         color: var(--text-main);
     }
+
     .user-email {
         font-size: 11px;
         color: var(--text-muted);
     }
+
     .logout-btn {
+        display: none;
         background: rgba(239, 68, 68, 0.15);
         border: 1px solid rgba(239, 68, 68, 0.4);
         color: #f87171;
@@ -190,16 +196,57 @@
         font-size: 12px;
         font-weight: 600;
         cursor: pointer;
-        display: flex;
         align-items: center;
         gap: 6px;
         transition: all 0.3s ease;
+        white-space: nowrap;
     }
+
     .logout-btn:hover {
         background: #ef4444;
         color: #fff;
         transform: translateY(-2px);
         box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4);
+    }
+
+    /* Expanded State (On Click) */
+    .user-capsule-bar.expanded {
+        padding: 8px 12px 8px 8px;
+        gap: 12px;
+        cursor: default;
+    }
+
+    .user-capsule-bar.expanded .user-info-text {
+        display: flex;
+        opacity: 1;
+    }
+
+    .user-capsule-bar.expanded .logout-btn {
+        display: flex;
+    }
+
+    /* Hover Tooltip (When Not Expanded) */
+    .user-tooltip {
+        position: absolute;
+        bottom: 115%;
+        right: 0;
+        background: rgba(15, 23, 42, 0.95);
+        border: 1px solid var(--accent-color);
+        padding: 8px 14px;
+        border-radius: 12px;
+        font-size: 12px;
+        color: var(--text-main);
+        white-space: nowrap;
+        pointer-events: none;
+        opacity: 0;
+        transform: translateY(10px);
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    }
+
+    .user-capsule-bar:not(.expanded):hover .user-tooltip {
+        opacity: 1;
+        transform: translateY(0);
     }
 
     /* HERO SECTION */
@@ -318,6 +365,9 @@
         color: var(--accent-color);
         text-transform: uppercase;
         font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 4px;
     }
 
     /* RESULT CARD */
@@ -482,38 +532,6 @@
         border: 2px solid var(--accent-color);
     }
 
-    /* CONTACT SECTION */
-    .contact {
-        max-width: 500px;
-        margin: 60px auto;
-        background: var(--card-bg);
-        border: 1px solid var(--border-color);
-        padding: 40px 30px;
-        border-radius: 20px;
-    }
-    .contact form {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-    }
-    .contact form input, .contact form textarea {
-        width: 100%;
-        padding: 12px;
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid var(--border-color);
-        border-radius: 8px;
-        color: #fff;
-    }
-    .contact form button {
-        padding: 12px;
-        background: var(--accent-gradient);
-        border: none;
-        border-radius: 8px;
-        color: #fff;
-        font-weight: 600;
-        cursor: pointer;
-    }
-
     /* FOOTER */
     footer {
         background: #04060a;
@@ -619,6 +637,39 @@
         margin-top: 5px;
     }
 
+    /* MOBILE RESPONSIVE MEDIA QUERIES */
+    @media (max-width: 768px) {
+        header {
+            padding: 12px 4%;
+        }
+        .hero h2 {
+            font-size: 36px;
+        }
+        .hero p {
+            font-size: 15px;
+        }
+        .search-container {
+            flex-direction: column;
+        }
+        .search-container button {
+            width: 100%;
+        }
+        .result-card {
+            flex-direction: column;
+            text-align: center;
+        }
+        .item-info {
+            text-align: center;
+        }
+        .card-actions {
+            justify-content: center;
+        }
+        .user-capsule-bar {
+            bottom: 15px;
+            right: 15px;
+        }
+    }
+
     @keyframes slideIn {
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
@@ -648,18 +699,22 @@
         </nav>
     </header>
 
-    <!-- FIXED FLOATING USER CAPSULE BAR -->
-    <div class="user-capsule-bar" id="userCapsule">
-        <div class="user-details">
-            <div class="user-avatar" id="avatarLetter">U</div>
-            <div class="user-info-text">
-                <span class="user-name" id="displayUserName">User Name</span>
-                <span class="user-email" id="displayUserEmail">user@example.com</span>
-            </div>
+    <!-- INTERACTIVE CIRCULAR AVATAR TO CAPSULE WIDGET -->
+    <div class="user-capsule-bar" id="userCapsuleWidget" onclick="toggleCapsule(event)">
+        <div class="user-avatar" id="avatarLetter">U</div>
+        <div class="user-info-text">
+            <span class="user-name" id="displayUserName">User Name</span>
+            <span class="user-email" id="displayUserEmail">user@example.com</span>
         </div>
-        <button class="logout-btn" onclick="handleLogout()">
+        <button class="logout-btn" onclick="handleLogout(event)">
             <i class="fa-solid fa-right-from-bracket"></i> Logout
         </button>
+
+        <!-- Tooltip on Hover (When Circle Only) -->
+        <div class="user-tooltip" id="userTooltip">
+            <strong id="tooltipName">User Name</strong><br>
+            <small id="tooltipEmail">user@example.com</small>
+        </div>
     </div>
 
     <div class="hero">
@@ -754,9 +809,26 @@
 
         document.getElementById("displayUserName").innerText = userName;
         document.getElementById("displayUserEmail").innerText = userEmail;
+        document.getElementById("tooltipName").innerText = userName;
+        document.getElementById("tooltipEmail").innerText = userEmail;
         document.getElementById("avatarLetter").innerText = userName.charAt(0).toUpperCase();
 
-        function handleLogout() {
+        // Expand Capsule Widget on Click
+        function toggleCapsule(e) {
+            const capsule = document.getElementById("userCapsuleWidget");
+            capsule.classList.toggle("expanded");
+        }
+
+        // Close Capsule when clicking outside
+        document.addEventListener("click", function(e) {
+            const capsule = document.getElementById("userCapsuleWidget");
+            if (!capsule.contains(e.target)) {
+                capsule.classList.remove("expanded");
+            }
+        });
+
+        function handleLogout(e) {
+            e.stopPropagation(); // Prevent toggling capsule on logout click
             localStorage.removeItem("isLoggedIn");
             localStorage.removeItem("userName");
             localStorage.removeItem("userEmail");
@@ -808,7 +880,10 @@
                 const isSong = item.type === "song";
                 const icon = isSong ? "fa-music" : "fa-film";
                 const sub = isSong ? `by ${item.artist}` : `(${item.year})`;
-                const badgeText = isSong ? "<i class="fa-solid fa-music"></i> Song" : "<i class="fa-solid fa-film"></i> Movie";
+                
+                const badgeText = isSong 
+                    ? `<i class="fa-solid fa-music"></i> Song` 
+                    : `<i class="fa-solid fa-film"></i> Movie`;
 
                 const div = document.createElement("div");
                 div.className = "suggestion-item";
