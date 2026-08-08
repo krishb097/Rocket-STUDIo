@@ -132,7 +132,7 @@
         box-shadow: 0 0 25px rgba(168, 85, 247, 0.7);
     }
 
-    /* CIRCULAR AVATAR TO CAPSULE WIDGET */
+    /* INTERACTIVE CIRCULAR AVATAR TO CAPSULE WIDGET */
     .user-capsule-bar {
         position: fixed;
         bottom: 25px;
@@ -163,6 +163,13 @@
         color: #fff;
         box-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
         flex-shrink: 0;
+        overflow: hidden;
+    }
+
+    .user-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 
     .user-info-text {
@@ -209,7 +216,6 @@
         box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4);
     }
 
-    /* Expanded State (On Click) */
     .user-capsule-bar.expanded {
         padding: 8px 12px 8px 8px;
         gap: 12px;
@@ -225,7 +231,6 @@
         display: flex;
     }
 
-    /* Hover Tooltip (When Not Expanded) */
     .user-tooltip {
         position: absolute;
         bottom: 115%;
@@ -637,37 +642,16 @@
         margin-top: 5px;
     }
 
-    /* MOBILE RESPONSIVE MEDIA QUERIES */
     @media (max-width: 768px) {
-        header {
-            padding: 12px 4%;
-        }
-        .hero h2 {
-            font-size: 36px;
-        }
-        .hero p {
-            font-size: 15px;
-        }
-        .search-container {
-            flex-direction: column;
-        }
-        .search-container button {
-            width: 100%;
-        }
-        .result-card {
-            flex-direction: column;
-            text-align: center;
-        }
-        .item-info {
-            text-align: center;
-        }
-        .card-actions {
-            justify-content: center;
-        }
-        .user-capsule-bar {
-            bottom: 15px;
-            right: 15px;
-        }
+        header { padding: 12px 4%; }
+        .hero h2 { font-size: 36px; }
+        .hero p { font-size: 15px; }
+        .search-container { flex-direction: column; }
+        .search-container button { width: 100%; }
+        .result-card { flex-direction: column; text-align: center; }
+        .item-info { text-align: center; }
+        .card-actions { justify-content: center; }
+        .user-capsule-bar { bottom: 15px; right: 15px; }
     }
 
     @keyframes slideIn {
@@ -700,13 +684,15 @@
     </header>
 
     <!-- INTERACTIVE CIRCULAR AVATAR TO CAPSULE WIDGET -->
-    <div class="user-capsule-bar" id="userCapsuleWidget" onclick="toggleCapsule(event)">
-        <div class="user-avatar" id="avatarLetter">U</div>
+    <div class="user-capsule-bar" id="userCapsuleWidget">
+        <div class="user-avatar" id="avatarBox">
+            <span id="avatarLetter">U</span>
+        </div>
         <div class="user-info-text">
             <span class="user-name" id="displayUserName">User Name</span>
             <span class="user-email" id="displayUserEmail">user@example.com</span>
         </div>
-        <button class="logout-btn" onclick="handleLogout(event)">
+        <button class="logout-btn" id="logoutBtnBtn">
             <i class="fa-solid fa-right-from-bracket"></i> Logout
         </button>
 
@@ -801,40 +787,82 @@
         </div>
     </div>
 
-    <!-- JavaScript Engine & Auth Handler -->
-    <script>
-        // Set User Profile Details from Local Storage
-        const userName = localStorage.getItem("userName") || "User";
-        const userEmail = localStorage.getItem("userEmail") || "user@roket.com";
+    <!-- Firebase Authentication Observer & App Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        document.getElementById("displayUserName").innerText = userName;
-        document.getElementById("displayUserEmail").innerText = userEmail;
-        document.getElementById("tooltipName").innerText = userName;
-        document.getElementById("tooltipEmail").innerText = userEmail;
-        document.getElementById("avatarLetter").innerText = userName.charAt(0).toUpperCase();
+        const firebaseConfig = {
+            apiKey: "AIzaSyCPdtPHt-B45evpADYufE1H2TVtRrV7Eek",
+            authDomain: "rocket-studio-c06b9.firebaseapp.com",
+            projectId: "rocket-studio-c06b9",
+            storageBucket: "rocket-studio-c06b9.firebasestorage.app",
+            messagingSenderId: "302824968036",
+            appId: "1:302824968036:web:df5dc20b20ebdc6ac7f471",
+            measurementId: "G-S1Q68G3EY2"
+        };
 
-        // Expand Capsule Widget on Click
-        function toggleCapsule(e) {
-            const capsule = document.getElementById("userCapsuleWidget");
-            capsule.classList.toggle("expanded");
-        }
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Fetch Live Logged In User Profile Data
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const name = user.displayName || localStorage.getItem("userName") || user.email.split('@')[0];
+                const email = user.email || localStorage.getItem("userEmail");
+                
+                document.getElementById("displayUserName").innerText = name;
+                document.getElementById("displayUserEmail").innerText = email;
+                document.getElementById("tooltipName").innerText = name;
+                document.getElementById("tooltipEmail").innerText = email;
+
+                if (user.photoURL) {
+                    document.getElementById("avatarBox").innerHTML = `<img src="${user.photoURL}" alt="User Avatar">`;
+                } else {
+                    document.getElementById("avatarLetter").innerText = name.charAt(0).toUpperCase();
+                }
+            } else {
+                // Fallback to Local Storage if offline
+                const name = localStorage.getItem("userName") || "User";
+                const email = localStorage.getItem("userEmail") || "user@roket.com";
+                document.getElementById("displayUserName").innerText = name;
+                document.getElementById("displayUserEmail").innerText = email;
+                document.getElementById("tooltipName").innerText = name;
+                document.getElementById("tooltipEmail").innerText = email;
+                document.getElementById("avatarLetter").innerText = name.charAt(0).toUpperCase();
+            }
+        });
+
+        // Toggle Capsule Expand / Collapse on Avatar Click
+        const capsule = document.getElementById("userCapsuleWidget");
+        capsule.addEventListener("click", (e) => {
+            if (!e.target.closest("#logoutBtnBtn")) {
+                capsule.classList.toggle("expanded");
+            }
+        });
 
         // Close Capsule when clicking outside
-        document.addEventListener("click", function(e) {
-            const capsule = document.getElementById("userCapsuleWidget");
+        document.addEventListener("click", (e) => {
             if (!capsule.contains(e.target)) {
                 capsule.classList.remove("expanded");
             }
         });
 
-        function handleLogout(e) {
-            e.stopPropagation(); // Prevent toggling capsule on logout click
-            localStorage.removeItem("isLoggedIn");
-            localStorage.removeItem("userName");
-            localStorage.removeItem("userEmail");
-            window.location.href = "login.html";
-        }
+        // Fixed Logout Handler
+        document.getElementById("logoutBtnBtn").addEventListener("click", (e) => {
+            e.stopPropagation();
+            signOut(auth).then(() => {
+                localStorage.clear();
+                window.location.href = "login.html";
+            }).catch(() => {
+                localStorage.clear();
+                window.location.href = "login.html";
+            });
+        });
+    </script>
 
+    <!-- Movies & Songs JavaScript Engine -->
+    <script>
         let currentSearchedItem = "";
         let currentItemType = "song";
         let debounceTimer;
@@ -880,7 +908,6 @@
                 const isSong = item.type === "song";
                 const icon = isSong ? "fa-music" : "fa-film";
                 const sub = isSong ? `by ${item.artist}` : `(${item.year})`;
-                
                 const badgeText = isSong 
                     ? `<i class="fa-solid fa-music"></i> Song` 
                     : `<i class="fa-solid fa-film"></i> Movie`;
