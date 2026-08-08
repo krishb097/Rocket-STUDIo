@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Roket STUDIo | Movies & Songs Hub</title>
+    
+    <!-- PWA Web App & Favicon Integration -->
+    <link rel="icon" type="image/png" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0UoAYB2iDlhda9bwpjdcmf7W2VB2uoRFArwUt2igFr9cV69TDY6FJrA&s=10">
+    <link rel="apple-touch-icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0UoAYB2iDlhda9bwpjdcmf7W2VB2uoRFArwUt2igFr9cV69TDY6FJrA&s=10">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#00f2fe">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Roket STUDIo">
+
     <!-- Access Guard Script (Runs before page renders) -->
     <script>
         const isLoggedIn = localStorage.getItem("isLoggedIn");
@@ -11,9 +21,9 @@
             window.location.href = "login.html";
         }
     </script>
-    <!-- Google Fonts -->
+
+    <!-- Google Fonts & FontAwesome -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous"/>
 </head>
 <style>
@@ -787,6 +797,17 @@
         </div>
     </div>
 
+    <!-- PWA Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('Service Worker Registered Successfully!'))
+                    .catch(err => console.log('Service Worker Registration Failed:', err));
+            });
+        }
+    </script>
+
     <!-- Firebase Authentication Observer & App Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -822,7 +843,6 @@
                     document.getElementById("avatarLetter").innerText = name.charAt(0).toUpperCase();
                 }
             } else {
-                // Fallback to Local Storage if offline
                 const name = localStorage.getItem("userName") || "User";
                 const email = localStorage.getItem("userEmail") || "user@roket.com";
                 document.getElementById("displayUserName").innerText = name;
@@ -908,6 +928,7 @@
                 const isSong = item.type === "song";
                 const icon = isSong ? "fa-music" : "fa-film";
                 const sub = isSong ? `by ${item.artist}` : `(${item.year})`;
+                
                 const badgeText = isSong 
                     ? `<i class="fa-solid fa-music"></i> Song` 
                     : `<i class="fa-solid fa-film"></i> Movie`;
